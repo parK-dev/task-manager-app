@@ -9,20 +9,13 @@ try {
   const Task = mongoose.model('Task', {
     description: {
       type: String,
-      required: true
+      required: true,
+      trim: true
     },
     completed: {
       type: Boolean,
-      required: true
-    },
-    email: {
-      type: String,
       required: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error('The email is not valid')
-        }
-      }
+      default: false
     }
   });
   const task = new Task({
@@ -31,6 +24,39 @@ try {
     email: 'test'
   });
   await task.save();
+
+  const User = mongoose.model('User', {
+    username: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    email: {
+      type: String,
+      required: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error('The email is not valid');
+        };
+      }
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+      validate(value) {
+        if (validator.contains(value, 'password')) {
+          throw new Error('The password cannot contain <password>');
+        };
+      }
+    }
+  });
+  const newUser = new User ({
+    username: 'park',
+    email: 'park@park.com',
+    password: 'this should work'
+  });
+  await newUser.save();
 } catch (e) {
   console.error(e);
 } finally {
