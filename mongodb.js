@@ -5,22 +5,21 @@ const MongoClient = mongodb.MongoClient;
 
 const uri = process.env.DB.toString();
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-const dbName = 'taskManagerDB';
 
+async function run() {
+  try {
+    await client.connect();
+    const database = client.db('taskManagerDB');
+    const collection = database.collection('Tasks');
+    const found = await collection.deleteOne({
+      description:"Figure out Async/Await"
+    });
+    console.log(found);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+};
 
-
-client.connect(err => {
-  if (err) {
-    return console.error(err);
-  };
-  console.log('Connected successfully.');
-  const task = {title: 'Figure it out', date: 'today'};
-  const collection = client.db(dbName).collection("Tasks");
-  collection.insertOne(task, (err, res) =>{
-    if (err) {
-      return console.error(err);
-    };
-    client.close();
-  }); 
-});
-
+run().catch(console.dir);
