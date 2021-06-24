@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from 'dotenv/config';
+import validator from "validator";
 
 const uri = process.env.DB.toString();
 
@@ -13,11 +14,21 @@ try {
     completed: {
       type: Boolean,
       required: true
+    },
+    email: {
+      type: String,
+      required: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error('The email is not valid')
+        }
+      }
     }
   });
   const task = new Task({
     description: 2,
-    completed: false
+    completed: false,
+    email: 'test'
   });
   await task.save();
 } catch (e) {
