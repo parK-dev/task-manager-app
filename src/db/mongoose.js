@@ -44,6 +44,7 @@ try {
       type: String,
       required: true,
       trim: true,
+      minlength: 6,
       validate(value) {
         if (validator.contains(value, 'password')) {
           throw new Error('The password cannot contain <password>');
