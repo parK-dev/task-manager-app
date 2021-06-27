@@ -1,7 +1,8 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import validator from "validator";
+import bcrypt from 'bcryptjs';
 
-const User = mongoose.model('User', {
+const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -28,5 +29,15 @@ const User = mongoose.model('User', {
     }
   }
 });
+
+// Password Hashing
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 8);
+  };
+  next(); // exits the function
+});
+
+const User = mongoose.model('User', userSchema);
 
 export default User

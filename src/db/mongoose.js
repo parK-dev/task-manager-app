@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv/config";
+import mongoose from 'mongoose';
+import dotenv from 'dotenv/config';
 
 const uri = process.env.DB.toString();
 mongoose.set('useFindAndModify', false);
