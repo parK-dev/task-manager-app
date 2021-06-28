@@ -46,6 +46,13 @@ userSchema.methods.toJSON = function () {
   return userObject;
 };
 
+// Delete user tasks when user is removed
+userSchema.pre('remove', async function (next) {
+  await Task.deleteMany({ owner: this._id });
+  next();
+});
+
+// AuthToken Generator
 userSchema.methods.generateAuthToken = async function () {
   const token = jwt.sign({ _id: this._id.toString() }, 'iamlostinthewoods');
   this.tokens = this.tokens.concat({ token });
@@ -54,12 +61,12 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-
+// Login method
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
-  if (!user) { throw new Error('Unable to login')};
+  if (!user) { throw new Error('Unable to login') };
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {throw new Error('Unable to login')};
+  if (!isMatch) { throw new Error('Unable to login') };
   return user;
 };
 
