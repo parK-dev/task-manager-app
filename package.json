@@ -2,10 +2,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "env-cmd ./.env nodemon src/index.js",
-    "test": "env-cmd ./.env jest --watch"
+    "dev": "nodemon src/index.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch --runInBand --detectOpenHandles"
   },
   "jest": {
+    "transform" : {},
     "testEnvironment": "node"
   },
   "type": "module",
