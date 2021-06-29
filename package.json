@@ -2,7 +2,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "env-cmd ./.env nodemon src/index.js",
+    "test": "env-cmd ./.env jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "type": "module",
   "dependencies": {
@@ -19,6 +23,7 @@
   },
   "devDependencies": {
     "jest": "^27.0.6",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
   }
 }
