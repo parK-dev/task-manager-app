@@ -1,31 +1,16 @@
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
 import request from 'supertest';
 import app from '../src/app.js';
-import User from '../src/models/user.js'
+import User from '../src/models/user.js';
+import { user1, user1Id, setupDatabase } from './fixtures/db.js';
 
-const user1Id = new mongoose.Types.ObjectId();
-const user1 = {
-  _id: user1Id,
-  username: 'user1',
-  email: 'user1@user.com',
-  password: '86theUzer!!',
-  tokens: [{
-    token: jwt.sign({ _id: user1Id }, process.env.TOKEN)
-  }]
-}
-
-beforeEach(async () => {
-  await User.deleteMany();
-  await new User(user1).save();
-});
+beforeEach(setupDatabase);
 
 test('Should sign up a new user', async () => {
   const response = await request(app)
     .post('/users')
     .send({
-      username: 'user2',
-      email: 'user2@user.com',
+      username: 'user3',
+      email: 'user3@user.com',
       password: 'ThisIsLostInTheWoods'
     }).expect(201);
 
